@@ -5,6 +5,12 @@
 #include <QDate>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
+#include <QMap>
+#include <QtCharts/QChartView>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QChart>
+#include <QDialog>
+#include <QVBoxLayout>
 
 class Reservation
 {

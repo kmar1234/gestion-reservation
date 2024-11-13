@@ -36,6 +36,8 @@ private slots:
 
     void on_BTRCH_7_clicked();
 
+    void on_BTRCH_8_clicked();
+
 private:
     Ui::MainWindow *ui;
     QString etattrie;

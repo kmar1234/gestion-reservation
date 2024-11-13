@@ -5,15 +5,19 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QThread>
-//#include <QtCharts/QChartView>
-//#include <QtCharts/QPieSeries>
-//#include <QtCharts/QChart>
-//using namespace QtCharts;
+#include "generateurpdf.h"
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
+#include <QIntValidator>
+
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-{
+: QMainWindow(parent),
+  ui(new Ui::MainWindow){
     ui->setupUi(this);
+    ui->LA_Num->setRange(0, 999999);
+    QRegularExpression rx("^[a-zA-Z\\s]+$");
+    QValidator *validator = new QRegularExpressionValidator(rx, this);
+    ui->CA_type->setValidator(validator);
 
     Reservation reservation;
     ui->tab_reservation->setModel(reservation.afficher());
@@ -103,7 +107,7 @@ void MainWindow::on_BTRCH_clicked()
     if(id!=NULL){
         Reservation r;
         r.recherche(id);
-        if(r.getNum()==0){
+        if(r.getId()==0){
             QMessageBox::information (nullptr, QObject::tr("Not OK"),
                                        QObject::tr("Valier saisir une id valid \n"
                                       "Click Cancel to exit."), QMessageBox::Cancel);
@@ -184,7 +188,14 @@ void MainWindow::on_RBdc_clicked()
 
 void MainWindow::on_BTRCH_7_clicked()
 {
-    /*Reservation reservation;
+    Reservation Reservation;
+    Reservation.statistiquesParType();
+
+}
+
+
+
+/*Reservation reservation;
         QMap<QString, int> stats = reservation.statistiquesParType();
 
         QPieSeries *series = new QPieSeries();
@@ -203,4 +214,19 @@ void MainWindow::on_BTRCH_7_clicked()
         QGraphicsScene *scene = new QGraphicsScene(this);
         scene->addWidget(chartView);
         ui->layoutGraph->setScene(scene);*/
+
+void MainWindow::on_BTRCH_8_clicked()
+{
+    QString nomFichierPDF = QFileDialog::getSaveFileName(this, "Enregistrer PDF", "", "Fichiers PDF (*.pdf)");
+
+               if (!nomFichierPDF.isEmpty()) {
+                   QSqlQueryModel* model = qobject_cast<QSqlQueryModel*>(ui->tab_reservation->model());
+
+                   if (model) {
+                       GenerateurPDF::genererPDF(model, nomFichierPDF);
+                   } else {
+                       QMessageBox::warning(this, "Erreur", "Le modèle n'est pas de type QSqlQueryModel.");
+                   }
+               }
 }
+
