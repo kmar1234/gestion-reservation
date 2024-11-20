@@ -43,6 +43,8 @@ public:
     QSqlQueryModel* trier(QString condition, bool ascendant);
     void recherche(int id);
     QMap<QString, int> statistiquesParType();
+
+
 };
 
 #endif // RESERVATION_H

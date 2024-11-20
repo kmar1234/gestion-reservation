@@ -8,7 +8,9 @@
 #include <QtCharts/QChart>
 #include <QDialog>
 #include <QVBoxLayout>
-
+#include <QFile>
+#include <QFileDialog>
+#include <QTextStream>
 
 Reservation::Reservation() {}
 
@@ -26,6 +28,7 @@ bool Reservation::ajouter() {
     query.bindValue(":DATE_FIN", dateFin);
     query.bindValue(":TYPE", type);
     return query.exec();
+
 }
 
 bool Reservation::modifier(int idr) {
@@ -37,6 +40,7 @@ bool Reservation::modifier(int idr) {
     query.bindValue(":DATE_FIN", dateFin);
     query.bindValue(":TYPE", type);
     return query.exec();
+
 }
 
 bool Reservation::supprimer(int id) {
@@ -44,6 +48,7 @@ bool Reservation::supprimer(int id) {
     query.prepare("DELETE FROM RESERVATION WHERE ID = :ID");
     query.bindValue(":ID", id);
     return query.exec();
+
 }
 
 QSqlQueryModel* Reservation::afficher() {
@@ -60,25 +65,24 @@ QSqlQueryModel* Reservation::afficher() {
 
 QSqlQueryModel* Reservation::trier(QString condition, bool ascendant) {
     QSqlQueryModel* model = new QSqlQueryModel();
-    QString order = ascendant ? "ASC" : "DESC";
-    QString query = "SELECT * FROM RESERVATION ORDER BY " + condition + " " + order;
-    model->setQuery(query);
-    //if (condition == "dateDebut") {
-       // model->setQuery("SELECT * FROM RESERVATION ORDER BY DATE_DEBUT " + order);
-    //} else if (condition == "dateFin") {
-     //   model->setQuery("SELECT * FROM RESERVATION ORDER BY DATE_FIN " + order);
-    //} else if (condition == "num") {
-      //  model->setQuery("SELECT * FROM RESERVATION ORDER BY NUM " + order);
-   // }
+       QString order = ascendant ? "ASC" : "DESC";
 
-    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Date Début"));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Date Fin"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Type"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("NUM"));
+       if (condition == "dateDebut") {
+           model->setQuery("SELECT * FROM RESERVATION ORDER BY DATE_DEBUT " + order);
+       } else if (condition == "dateFin") {
+           model->setQuery("SELECT * FROM RESERVATION ORDER BY DATE_FIN " + order);
+       } else if (condition == "nom") {
+           model->setQuery("SELECT * FROM RESERVATION ORDER BY NOM " + order);
+       }
 
-    return model;
-}
+       model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+       model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom"));
+       model->setHeaderData(2, Qt::Horizontal, QObject::tr("Date Début"));
+       model->setHeaderData(3, Qt::Horizontal, QObject::tr("Date Fin"));
+       model->setHeaderData(4, Qt::Horizontal, QObject::tr("Type"));
+
+       return model;
+   }
 
 void Reservation::recherche(int id) {
     QSqlQuery query;

@@ -38,6 +38,15 @@ private slots:
 
     void on_BTRCH_8_clicked();
 
+    void on_mail_clicked();
+
+    void on_Histo_clicked();
+    void afficherHistor();
+private:
+    void addToHist(const QString &action,int id);
+    void writeToHist(const QString &fileN);
+    QList <QString> historyList;
+    QString historiqueFileName ="C:/Users/PC/Desktop/Atelier_Connexion1/histo.txt";
 private:
     Ui::MainWindow *ui;
     QString etattrie;
