@@ -76,7 +76,7 @@ QSqlQueryModel* Reservation::trier(QString condition, bool ascendant) {
        }
 
        model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-       model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom"));
+       model->setHeaderData(1, Qt::Horizontal, QObject::tr("Num"));
        model->setHeaderData(2, Qt::Horizontal, QObject::tr("Date Début"));
        model->setHeaderData(3, Qt::Horizontal, QObject::tr("Date Fin"));
        model->setHeaderData(4, Qt::Horizontal, QObject::tr("Type"));
